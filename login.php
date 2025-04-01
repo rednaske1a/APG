@@ -37,6 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <body>
         <div class="container">
             <h1 style="font-size:50px;">apg.si</h1>
+            <button type="button" class="btn btn-outline-primary me-2">Login</button>
+            <button type="button" class="btn btn-primary">Sign-up</button>
         </div>
 <!--
         <form method="post" action="login.php">
@@ -51,9 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="button">Login</button>
         </form>
         -->
-
-        <p>Še nimate računa? <a href="register.php" style="color:blue;">Ustvarite ga tukaj</a>.</p>
-        
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
