@@ -36,14 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </head>
     <body>
         <!-- Centered using flexbox -->
-         <div style="height: 100vh; display: flex; align-items: center; justify-content: center;">
-            <h1>Prijava</h1>
-            <?php if ($error): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?php echo htmlspecialchars($error); ?>
-                </div>
-            <?php endif; ?>
-
+         <div style="height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center;">
             <div class="container">
                 <h1 style="font-size:120px;">APG.SI</h1>
                 <button type="button" class="btn btn-outline-primary me-2">Login</button>
