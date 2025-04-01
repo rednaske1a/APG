@@ -9,6 +9,9 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
+
 $user = $_SESSION['user'];
-<h1> Welcome, <?php echo htmlspecialchars($user['username']); ?>!</h1>
+?>
+
+<h1> Welcome, <?php echo htmlspecialchars($user['username']); ?>! </h1>
 <a href="logout.php" style="color:blue">Logout</a>
