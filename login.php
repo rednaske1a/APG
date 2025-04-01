@@ -35,12 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     </head>
     <body>
-        <h1>Prijava</h1>
-
-        <?php if ($error && false): ?>
-            <div class="error"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
-
+        <div class="container">
+            <h1 style="font-size:50px;">apg.si</h1>
+        </div>
+<!--
         <form method="post" action="login.php">
             <label>Uporabniško ime:
                 <input type="text" name="username" required>
@@ -52,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <br>
             <button type="submit" class="button">Login</button>
         </form>
+        -->
 
         <p>Še nimate računa? <a href="register.php" style="color:blue;">Ustvarite ga tukaj</a>.</p>
         
