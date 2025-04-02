@@ -1,0 +1,14 @@
+#chatContainer {
+    height: 400px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
+    padding: 15px;
+    background-color: #f8f9fa;
+}
+.chat-message {
+    margin-bottom: 10px;
+}
+.chat-timestamp {
+    font-size: 0.8rem;
+    color: #888;
+}

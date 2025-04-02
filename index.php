@@ -3,7 +3,8 @@ session_start();
 require 'db.php';
 
 $user = null; // Initialize $user to null
-$page = "home"; // Default page
+$error = '';
+$success = '';
 
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
@@ -12,6 +13,44 @@ if (isset($_SESSION['user'])) {
     // header("Location: login.php");
     // exit;
 }
+
+
+if(isset($_GET['page'])) {
+    $page = htmlspecialchars($_GET['page']);
+} else {
+    $page = "home"; // Default page
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
+  if(!$user) {
+      // If user is not logged in, redirect to login page
+      header("Location: login.php");
+      exit;
+  }
+  // We expect a form POST (not JSON here) so we use $_POST
+  $message = trim($_POST['message']);
+  if (empty($message)) {
+      $error = "Message cannot be empty.";
+  } else {
+      // Insert the message into the chat_messages table
+      $stmt = $pdo->prepare("INSERT INTO chat_messages (user_id, message) VALUES (?, ?)");
+      if ($stmt->execute([$user['id'], $message])) {
+          // Redirect to avoid form resubmission
+          header("Location: chat.php");
+          exit;
+      } else {
+          $error = "Error sending message.";
+      }
+  }
+}
+
+$stmt = $pdo->query("
+    SELECT cm.*, u.username 
+    FROM chat_messages cm
+    JOIN users u ON cm.user_id = u.id
+    ORDER BY cm.sent_at ASC
+");
+$messages = $stmt->fetchAll();
 
 ?>
 <!DOCTYPE html>
@@ -63,9 +102,38 @@ if (isset($_SESSION['user'])) {
       <?php if ($page == "home"): ?>
         <h1>Welcome to APG</h1>
         <p>This is the home page.</p>
+
+
+
       <?php elseif ($page == "chat"): ?>
         <h1>Chat Page</h1>
         <p>This is the chat page.</p>
+        <div class="container my-4">
+          <h2 class="text-center mb-4">Chat Room</h2>
+          <?php if ($error): ?>
+            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+          <?php elseif ($success): ?>
+            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
+          <?php endif; ?>
+          <div id="chatContainer" class="mb-3">
+            <?php foreach ($messages as $msg): ?>
+              <div class="chat-message">
+                <strong><?php echo htmlspecialchars($msg['username']); ?>:</strong>
+                <?php echo htmlspecialchars($msg['message']); ?>
+                <br>
+                <span class="chat-timestamp"><?php echo htmlspecialchars($msg['sent_at']); ?></span>
+              </div>
+            <?php endforeach; ?>
+          </div>
+          <form method="post" action="index.php">
+            <div class="input-group">
+              <input type="text" name="message" class="form-control" placeholder="Type your message..." required>
+              <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+          </form>
+        </div>
+
+
       <?php elseif ($page == "casino"): ?>
         <h1>Casino Page</h1>
         <p>This is the casino page.</p>
