@@ -106,8 +106,6 @@ $messages = $stmt->fetchAll();
 
 
       <?php elseif ($page == "chat"): ?>
-        <h1>Chat Page</h1>
-        <p>This is the chat page.</p>
         <div class="container my-4">
           <h2 class="text-center mb-4">Chat Room</h2>
           <?php if ($error): ?>
@@ -115,17 +113,21 @@ $messages = $stmt->fetchAll();
           <?php elseif ($success): ?>
             <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
           <?php endif; ?>
+          <!-- Chat container to hold messages -->
           <div id="chatContainer" class="mb-3">
             <?php foreach ($messages as $msg): ?>
-              <div class="chat-message">
-                <strong><?php echo htmlspecialchars($msg['username']); ?>:</strong>
-                <?php echo htmlspecialchars($msg['message']); ?>
-                <br>
-                <span class="chat-timestamp"><?php echo htmlspecialchars($msg['sent_at']); ?></span>
+              <?php 
+                  $bubbleClass = ($msg['username'] === $user['username']) ? 'chat-bubble self' : 'chat-bubble';
+              ?>
+              <div class="<?php echo $bubbleClass; ?>">
+                <div class="username"><?php echo htmlspecialchars($msg['username']); ?></div>
+                <div class="message-text"><?php echo htmlspecialchars($msg['message']); ?></div>
+                <div class="timestamp"><?php echo htmlspecialchars($msg['sent_at']); ?></div>
               </div>
             <?php endforeach; ?>
           </div>
-          <form method="post" action="index.php">
+          <!-- Chat form for sending new messages -->
+          <form method="post" action="chat.php">
             <div class="input-group">
               <input type="text" name="message" class="form-control" placeholder="Type your message..." required>
               <button type="submit" class="btn btn-primary">Send</button>
@@ -174,7 +176,10 @@ $messages = $stmt->fetchAll();
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <?php if ($page == "chat"): ?>
           <script>
-            // Function to fetch new messages using AJAX
+            // Pass current username from PHP to JavaScript for bubble alignment
+            const currentUser = "<?php echo htmlspecialchars($user['username']); ?>";
+
+            // Function to fetch new messages dynamically (using AJAX polling)
             async function fetchMessages() {
               try {
                 const response = await fetch("get_messages.php");
@@ -182,19 +187,26 @@ $messages = $stmt->fetchAll();
                 const container = document.getElementById("chatContainer");
                 container.innerHTML = "";
                 messages.forEach(msg => {
-                  const messageElem = document.createElement("div");
-                  messageElem.classList.add("chat-message");
-                  messageElem.innerHTML = `<strong>${msg.username}:</strong> ${msg.message} <br><span class="chat-timestamp">${msg.sent_at}</span>`;
-                  container.appendChild(messageElem);
+                  const bubble = document.createElement("div");
+                  bubble.classList.add("chat-bubble");
+                  if (msg.username === currentUser) {
+                      bubble.classList.add("self");
+                  }
+                  bubble.innerHTML = `
+                    <div class="username">${msg.username}</div>
+                    <div class="message-text">${msg.message}</div>
+                    <div class="timestamp">${msg.sent_at}</div>
+                  `;
+                  container.appendChild(bubble);
                 });
-                // Scroll to the bottom of the container
+                // Scroll to the bottom of the chat container
                 container.scrollTop = container.scrollHeight;
               } catch (error) {
                 console.error("Error fetching messages:", error);
               }
             }
             
-            // Poll for new messages every 3 seconds
+            // Poll the server every 3 seconds for new messages
             setInterval(fetchMessages, 3000);
           </script>
         <?php endif; ?>
