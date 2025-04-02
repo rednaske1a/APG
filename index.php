@@ -172,5 +172,31 @@ $messages = $stmt->fetchAll();
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    </body>
+        <?php if ($page == "chat"): ?>
+          <script>
+            // Function to fetch new messages using AJAX
+            async function fetchMessages() {
+              try {
+                const response = await fetch("get_messages.php");
+                const messages = await response.json();
+                const container = document.getElementById("chatContainer");
+                container.innerHTML = "";
+                messages.forEach(msg => {
+                  const messageElem = document.createElement("div");
+                  messageElem.classList.add("chat-message");
+                  messageElem.innerHTML = `<strong>${msg.username}:</strong> ${msg.message} <br><span class="chat-timestamp">${msg.sent_at}</span>`;
+                  container.appendChild(messageElem);
+                });
+                // Scroll to the bottom of the container
+                container.scrollTop = container.scrollHeight;
+              } catch (error) {
+                console.error("Error fetching messages:", error);
+              }
+            }
+            
+            // Poll for new messages every 3 seconds
+            setInterval(fetchMessages, 3000);
+          </script>
+        <?php endif; ?>
+      </body>
 </html>
