@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
       $stmt = $pdo->prepare("INSERT INTO chat_messages (user_id, message) VALUES (?, ?)");
       if ($stmt->execute([$user['id'], $message])) {
           // Redirect to avoid form resubmission
-          header("Location: chat.php");
+          header("Location: index.php?page=chat");
           exit;
       } else {
           $error = "Error sending message.";
