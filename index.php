@@ -9,9 +9,9 @@ $success = '';
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
 } else {
-    // Uncomment the following lines to force login when a user is not logged in
-    // header("Location: login.php");
-    // exit;
+    //Uncomment the following lines to force login when a user is not logged in
+    header("Location: login.php");
+    exit;
 }
 
 if(isset($_GET['page'])) {
