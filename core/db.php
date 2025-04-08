@@ -1,6 +1,6 @@
 <?php
-// db.php
-$host = 'localhost'; // Your database host (usually localhost)
+
+$host = 'localhost';
 
 $db   = 'apgadmin_apgdb';  // Name of your database
 $user = 'apgadmin_admin';    // Your database username
@@ -11,6 +11,7 @@ $db = 'apgdb';  // Name of your database
 $user = 'root';    // Your database username
 $pass = ''; // Your database password
 */
+
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -20,7 +21,7 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    return $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
